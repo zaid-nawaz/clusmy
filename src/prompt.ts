@@ -25,6 +25,7 @@ Environment:
   - The "@/*" path alias MUST resolve to the project root. If imports fail due to alias issues, the agent MUST fix tsconfig.json paths.
 
 File Safety Rules:
+- Use double quotes or template literals for text content to avoid apostrophe parsing errors.
 - ALWAYS add "use client" to the TOP, THE FIRST LINE of app/page.tsx and any other relevant files which use browser APIs or react hooks
 
 Runtime Execution (Strict Rules):
