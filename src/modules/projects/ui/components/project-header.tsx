@@ -30,11 +30,11 @@ interface Props {
 
 export const ProjectHeader = ({ projectId }: Props) => {
   const trpc = useTRPC();
-  const { data: project } = useSuspenseQuery(
+  const { data: project } = useSuspenseQuery(// we use this so you have access to suspense fallback , usequery returns loading state , it doesn't
     trpc.projects.getOne.queryOptions({ id: projectId })
   );
 
-  const { setTheme, theme } = useTheme();
+  const { setTheme, theme } = useTheme(); //gives you access to the global theme of the app
 
   return (
     <header className="p-2 flex justify-between items-center border-b">
@@ -45,7 +45,7 @@ export const ProjectHeader = ({ projectId }: Props) => {
             size="sm"
             className="focus-visible:ring-0 hover:bg-transparent hover:opacity-75 transition-opacity pl-2!"
           >
-            <Image src="/logo.svg" alt="Vibe" width={18} height={18} />
+            <Image src="/logo.svg" alt="clusmy" width={18} height={18} />
             <span className="text-sm font-medium">{project.name}</span>
             <ChevronDownIcon />
           </Button>

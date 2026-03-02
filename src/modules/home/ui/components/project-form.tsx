@@ -28,9 +28,9 @@ export const ProjectForm = () => {
   const router = useRouter();
   const trpc = useTRPC();
   const clerk = useClerk();
-  const queryClient = useQueryClient();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const queryClient = useQueryClient(); //query client stores server fetched data.
+  const form = useForm<z.infer<typeof formSchema>>({ //z.infer is used to infer the type of something , in this case formschema
+    resolver: zodResolver(formSchema), //after the user submit it's form , validate it using this formschema
     defaultValues: {
       value: "",
     },
@@ -38,12 +38,10 @@ export const ProjectForm = () => {
   
   const createProject = useMutation(trpc.projects.create.mutationOptions({
     onSuccess: (data) => {
-      queryClient.invalidateQueries(
-        trpc.projects.getMany.queryOptions(),
+      queryClient.invalidateQueries( // it is used to refresh the project list
+        trpc.projects.getMany.queryOptions(), //with queryclient , multiple component shares the same data , so if you fetch it here , it would show it's effect in other components.
       );
-    //   queryClient.invalidateQueries(
-    //     trpc.usage.status.queryOptions(),
-    //   );
+
       router.push(`/projects/${data.id}`);
     },
     onError: (error) => {
@@ -60,18 +58,18 @@ export const ProjectForm = () => {
   }));
   
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await createProject.mutateAsync({
+    await createProject.mutateAsync({ //the diff between mutate and mutateasync is that mutateasync returns a promise, so you can await it
       value: values.value,
     });
   };
 
-  const onSelect = (value: string) => {
-    form.setValue("value", value, {
-      shouldDirty: true,
-      shouldValidate: true,
-      shouldTouch: true,
-    });
-  };
+  // const onSelect = (value: string) => {
+  //   form.setValue("value", value, {
+  //     shouldDirty: true,
+  //     shouldValidate: true,
+  //     shouldTouch: true,
+  //   });
+  // };
   
   const [isFocused, setIsFocused] = useState(false);
   const isPending = createProject.isPending;
@@ -131,7 +129,7 @@ export const ProjectForm = () => {
             </Button>
           </div>
         </form>
-        <div className="flex-wrap justify-center gap-2 hidden md:flex max-w-3xl">
+        {/* <div className="flex-wrap justify-center gap-2 hidden md:flex max-w-3xl">
           {PROJECT_TEMPLATES.map((template) => (
             <Button 
               key={template.title}
@@ -143,7 +141,7 @@ export const ProjectForm = () => {
               {template.emoji} {template.title}
             </Button>
           ))}
-        </div>
+        </div> */}
       </section>
     </Form>
   );
